@@ -8,7 +8,7 @@ _py="python"
 _py2="${_py}2"
 _git="false"
 pkgname=reallymakepkg
-_pkgver="1.1.1.1.1"
+_pkgver="1.2.1.1.1.1"
 pkgver="${_pkgver}"
 pkgrel=1
 pkgdesc="System-independent makepkg"
@@ -58,6 +58,7 @@ package() {
     "${pkgname}-${_pkgver}"
   make \
     DESTDIR="${pkgdir}" \
+    PREFIX="/usr" \
     install
 }
 
