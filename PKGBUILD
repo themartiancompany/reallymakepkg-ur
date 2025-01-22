@@ -96,7 +96,7 @@ sha256sums=(
 
 package() {
   cd \
-    "${pkgname}-${_pkgver}"
+    "${_tarname}"
   make \
     DESTDIR="${pkgdir}" \
     install
