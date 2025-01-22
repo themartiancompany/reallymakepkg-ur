@@ -7,8 +7,12 @@
 _py="python"
 _py2="${_py}2"
 _git="false"
-pkgname=reallymakepkg
-_pkgver="1.2.1.1.1.1.1.1.1"
+_offline="false"
+_pkg=reallymakepkg
+_pkgname="${_pkg}"
+pkgname="${_pkgname}"
+_pkgver=1.2.1.1.1.1.1.1.1.1.1.1
+_commit="e10d1ee88a09be1c98d3614eb78e8268f810e16e"
 pkgver="${_pkgver}"
 pkgrel=1
 pkgdesc="System-independent makepkg"
@@ -26,34 +30,50 @@ depends=(
   'libcrash-bash'
   'pacman'
 )
-makedepends=()
+makedepends=(
+  'make'
+)
 checkdepends=(
   'shellcheck'
 )
 optdepends=(
+  "evmfs: Ethereum Virtual Machine File System resources support"
+  "ipfs-dlagent: IPFS resources support"
+  "transmission-dlagent: BitTorrent resources support"
   "${_py}-pygments: colorized output and syntax highlighting"
   "${_py2}-pygments: colorized output and syntax highlighting (Python 2)"
 )
 source=()
 sha256sums=()
 _url="file://${HOME}/${_pkgname}"
-[[ "${_git}" == true ]] && \
+_url="${url}"
+_tag="${_commit}"
+_tag_name="commit"
+_tarname="${pkgname}-${_tag}"
+if [[ "${_offline}" == "true" ]]; then
+  _url="file://${HOME}/${pkgname}"
+fi
+if [[ "${_git}" == true ]]; then
   makedepends+=(
-    git
-  ) && \
-  source+=(
-    "${pkgname}-${pkgver}::git+${url}"
-  ) && \
-  sha256sums+=(
-    SKIP
+    "git"
   )
-[[ "${_git}" == false ]] && \
-  source+=(
-    "${pkgname}-${pkgver}.tar.gz::${url}/archive/refs/tags/${pkgver}.tar.gz"
-  ) && \
-  sha256sums+=(
-    '0a44f3d012ec672ff7ec01fa788517ecfd0973b2fcdd29590d18843df1d5bcb6'
-  )
+  _src="${_tarname}::git+${_url}#${_tag_name}=${_tag}?signed"
+  _sum="SKIP"
+elif [[ "${_git}" == false ]]; then
+  if [[ "${_tag_name}" == 'pkgver' ]]; then
+    _src="${_tarname}.tar.gz::${_url}/archive/refs/tags/${_tag}.tar.gz"
+    _sum="d4f4179c6e4ce1702c5fe6af132669e8ec4d0378428f69518f2926b969663a91"
+  elif [[ "${_tag_name}" == "commit" ]]; then
+    _src="${_tarname}.zip::${_url}/archive/${_commit}.zip"
+    _sum='0f6b66b2ac088ed181886638fff90ce7bd6bf6d062cbaf4f05430929997bc50a'
+  fi
+fi
+source=(
+  "${_src}"
+)
+sha256sums=(
+  "${_sum}"
+)
 
 package() {
   cd \
