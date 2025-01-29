@@ -30,8 +30,8 @@ _offline="false"
 _pkg=reallymakepkg
 _pkgname="${_pkg}"
 pkgname="${_pkgname}"
-_pkgver=1.2.1.1.1.1.1.1.1.1.1.1
-_commit="e10d1ee88a09be1c98d3614eb78e8268f810e16e"
+_pkgver=1.2.1.1.1.1.1.1.1.1.1.1.1
+_commit="34ddbf1772e80946e5d0d1c74bc826758c307214"
 pkgver="${_pkgver}"
 pkgrel=1
 pkgdesc="System-independent makepkg"
@@ -84,7 +84,7 @@ elif [[ "${_git}" == false ]]; then
     _sum="d4f4179c6e4ce1702c5fe6af132669e8ec4d0378428f69518f2926b969663a91"
   elif [[ "${_tag_name}" == "commit" ]]; then
     _src="${_tarname}.zip::${_url}/archive/${_commit}.zip"
-    _sum='0f6b66b2ac088ed181886638fff90ce7bd6bf6d062cbaf4f05430929997bc50a'
+    _sum='6b049b571b0095b5c1434a37c7b9c256c89cbcab0e9c10d6d631fe8f87a337c5'
   fi
 fi
 source=(
