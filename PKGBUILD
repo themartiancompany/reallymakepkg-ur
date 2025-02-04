@@ -45,6 +45,7 @@ license=(
   'AGPL3'
 )
 depends=(
+  'binutils'
   'bash'
   'libcrash-bash'
   'pacman'
