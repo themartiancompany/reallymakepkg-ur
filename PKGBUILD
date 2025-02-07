@@ -20,6 +20,7 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Maintainer: Truocolo <truocolo@aol.com>
+# Maintainer: Truocolo <truocolo@0x6E5163fC4BFc1511Dbe06bB605cc14a3e462332b>
 # Maintainer: Pellegrino Prevete <pellegrinoprevete@gmail.com>
 # Contributor: Marcell Meszaros (MarsSeed) <marcell.meszaros@runbox.eu>
 
@@ -30,8 +31,8 @@ _offline="false"
 _pkg=reallymakepkg
 _pkgname="${_pkg}"
 pkgname="${_pkgname}"
-_pkgver="1.2.1.1.1.1.1.1.1.1.1.1.1"
-_commit="0727bfde83649c95567e8660a71d478a3b1053e9"
+_pkgver="1.2.1.1.1.1.1.1.1.1.1.1.1.1"
+_commit="47fd1a6a30d7be25b9c43f71271eced93786128a"
 pkgver="${_pkgver}"
 pkgrel=1
 pkgdesc="System-independent makepkg"
@@ -85,7 +86,7 @@ elif [[ "${_git}" == false ]]; then
     _sum="d4f4179c6e4ce1702c5fe6af132669e8ec4d0378428f69518f2926b969663a91"
   elif [[ "${_tag_name}" == "commit" ]]; then
     _src="${_tarname}.zip::${_url}/archive/${_commit}.zip"
-    _sum='7455cee741fb1eaa175b9c5f4654deaa11c83c8e8df15c234ce7b6b7fc2d7e08'
+    _sum='a719b5af0cb97df3cc95bf1bd2b5e650852e5a34b4cf71357aead012076aa3df'
   fi
 fi
 source=(
