@@ -8,7 +8,7 @@ _py="python"
 _py2="${_py}2"
 _git="false"
 pkgname=reallymakepkg
-_pkgver="1.2.1.1.1.1.1.1.1"
+_pkgver="1.2.1.1.1.1.1.1.1.1"
 pkgver="${_pkgver}"
 pkgrel=1
 pkgdesc="System-independent makepkg"
@@ -52,7 +52,7 @@ _url="file://${HOME}/${_pkgname}"
     "${pkgname}-${pkgver}.tar.gz::${url}/archive/refs/tags/${pkgver}.tar.gz"
   ) && \
   sha256sums+=(
-    '0a44f3d012ec672ff7ec01fa788517ecfd0973b2fcdd29590d18843df1d5bcb6'
+    '255deb6c2a51bf911d0a53d4a9fa7354b09dd105c453df6883fb7de8925b8e76'
   )
 
 package() {
