@@ -64,6 +64,21 @@ depends=(
   'libcrash-bash'
   'pacman'
 )
+if [[ "${_os}" == 'Android' ]]; then
+  depends+=(
+    'libandroid-complex-math'
+    'libandroid-glob'
+    'libandroid-nl-types'
+    'libandroid-posix-semaphore'
+    'libandroid-shmem'
+    'libandroid-spawn'
+    'libandroid-stub'
+    'libandroid-support'
+    'libandroid-sysv-semaphore'
+    'libandroid-utimes'
+    'libandroid-wordexp'
+  )
+fi
 makedepends=(
   'make'
 )
