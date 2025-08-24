@@ -19,11 +19,19 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Maintainer: Truocolo <truocolo@aol.com>
-# Maintainer: Truocolo <truocolo@0x6E5163fC4BFc1511Dbe06bB605cc14a3e462332b>
-# Maintainer: Pellegrino Prevete (tallero) <pellegrinoprevete@gmail.com>
-# Maintainer: Pellegrino Prevete (dvorak) <dvorak@0x87003Bd6C074C713783df04f36517451fF34CBEf>
-# Contributor: Marcell Meszaros (MarsSeed) <marcell.meszaros@runbox.eu>
+# Maintainer:
+#   Truocolo
+#     <truocolo@aol.com>
+#     <truocolo@0x6E5163fC4BFc1511Dbe06bB605cc14a3e462332b>
+# Maintainer:
+#   Pellegrino Prevete (tallero)
+#     <pellegrinoprevete@gmail.com>
+# Maintainer:
+#   Pellegrino Prevete (dvorak)
+#     <dvorak@0x87003Bd6C074C713783df04f36517451fF34CBEf>
+# Contributor:
+#   Marcell Meszaros (MarsSeed)
+#     <marcell.meszaros@runbox.eu>
 
 _evmfs_available="$( \
   command \
@@ -37,18 +45,22 @@ if [[ ! -v "_evmfs" ]]; then
     _evmfs="false"
   fi
 fi
+if [[ ! -v "_git" ]]; then
+  _git="false"
+fi
+if [[ ! -v "_offline" ]]; then
+  _offline="false"
+fi
 _py="python"
 _py2="${_py}2"
-_git="false"
-_offline="false"
 _pkg=reallymakepkg
 _pkgname="${_pkg}"
 pkgname="${_pkgname}"
-_pkgver="1.2.2"
-_commit="baa8226d9218a0d5016e1a464982dd676f74a2a9"
+_pkgver="1.2.2.1"
+_commit="98bdf63313c4d1f0c1fc43f5897faceb5892c8b8"
 pkgver="${_pkgver}"
 pkgrel=1
-pkgdesc="System-independent makepkg"
+pkgdesc="System-independent makepkg."
 arch=(
   'any'
 )
@@ -82,6 +94,10 @@ fi
 makedepends=(
   'make'
 )
+provides=(
+  "recipe-get=${pkgver}"
+  "termux-install-shared=${pkgver}"
+)
 checkdepends=(
   'shellcheck'
 )
@@ -102,20 +118,21 @@ _tarname="${pkgname}-${_tag}"
 if [[ "${_offline}" == "true" ]]; then
   _url="file://${HOME}/${pkgname}"
 fi
+_archive_sum="6e30cfc5c6868b63501651f4f343e63cfdc2ee48ca2c22985ed7bd43858e586d"
+_archive_sig_sum="bd9c8eb52ec12088bc98bc53e68a96bdade6f8d363d07d0b801a9c24836bc763"
 _evmfs_network="100"
 _evmfs_address="0x69470b18f8b8b5f92b48f6199dcb147b4be96571"
 _evmfs_ns="0x87003Bd6C074C713783df04f36517451fF34CBEf"
-_archive_sum='28821a7ed6114c13af17f1fbf86e1db8159f00491965df5c917c4cf1ba97d37a'
 _evmfs_archive_uri="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}/${_archive_sum}"
-_evmfs_archive_src="${_tarname}.zip::${_evmfs_archive_uri}"
-_archive_sig_sum="da979ecab925b2f2dafb95d3151b5829f15446c25799acaedfc391d1b7b323a4"
+_evmfs_archive_src="${_tarname}.tar.gz::${_evmfs_archive_uri}"
 _archive_sig_uri="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}/${_archive_sig_sum}"
-_archive_sig_src="${_tarname}.zip.sig::${_archive_sig_uri}"
+_archive_sig_src="${_tarname}.tar.gz.sig::${_archive_sig_uri}"
 if [[ "${_evmfs}" == "true" ]]; then
   makedepends+=(
     "evmfs"
   )
   _src="${_evmfs_archive_src}"
+  _sum="${_archive_sum}"
   source+=(
     "${_archive_sig_src}"
   )
@@ -144,12 +161,14 @@ sha256sums=(
   "${_sum}"
 )
 validpgpkeys=(
-  # Truocolo <truocolo@aol.com>
+  # Truocolo
+  #   <truocolo@aol.com>
   '97E989E6CF1D2C7F7A41FF9F95684DBE23D6A3E9'
   'DD6732B02E6C88E9E27E2E0D5FC6652B9D9A6C01'
-  # Truocolo <truocolo@0x6E5163fC4BFc1511Dbe06bB605cc14a3e462332b>
+  #   <truocolo@0x6E5163fC4BFc1511Dbe06bB605cc14a3e462332b>
   'F690CBC17BD1F53557290AF51FC17D540D0ADEED'
-  # Pellegrino Prevete (dvorak) <dvorak@0x87003Bd6C074C713783df04f36517451fF34CBEf>
+  # Pellegrino Prevete (dvorak)
+  #   <dvorak@0x87003Bd6C074C713783df04f36517451fF34CBEf>
   '12D8E3D7888F741E89F86EE0FEC8567A644F1D16'
 )
 
@@ -159,6 +178,11 @@ package() {
   make \
     DESTDIR="${pkgdir}" \
     install
+  install \
+    -vDm644 \
+    "COPYING" \
+    -t \
+    "${pkgdir}/usr/share/licenses/${pkgbase}"
 }
 
 # vim: ft=sh syn=sh et
