@@ -59,8 +59,8 @@ _py2="${_py}2"
 _pkg=reallymakepkg
 _pkgname="${_pkg}"
 pkgname="${_pkgname}"
-_pkgver="1.2.2.1"
-_commit="98bdf63313c4d1f0c1fc43f5897faceb5892c8b8"
+_pkgver="1.2.2.1.1"
+_commit="37db830aa197b8c4b0396a434d2a50c12de8d502"
 pkgver="${_pkgver}"
 pkgrel=1
 pkgdesc="System-independent makepkg."
@@ -178,14 +178,21 @@ validpgpkeys=(
 package() {
   cd \
     "${_tarname}"
+  export \
+    DESTDIR="${pkgdir}"
   make \
     DESTDIR="${pkgdir}" \
     install
+  if [[ "${_os}" == "Android" ]]; then
+    _pkgdir="${terdir}"
+  elif [[ "${_os}" == "Android" ]]; then
+    _pkgdir="${pkgdir}"
+  fi
   install \
     -vDm644 \
     "COPYING" \
     -t \
-    "${pkgdir}/usr/share/licenses/${pkgbase}"
+    "${_pkgdir}/usr/share/licenses/${pkgbase}"
 }
 
 # vim: ft=sh syn=sh et
