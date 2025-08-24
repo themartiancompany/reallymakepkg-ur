@@ -188,7 +188,7 @@ package() {
     install
   if [[ "${_os}" == "Android" ]]; then
     _pkgdir="${terdir}"
-  elif [[ "${_os}" == "Android" ]]; then
+  elif [[ "${_os}" == "GNU/Linux" ]]; then
     _pkgdir="${pkgdir}"
   fi
   mv \
