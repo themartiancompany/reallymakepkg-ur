@@ -59,8 +59,8 @@ _py2="${_py}2"
 _pkg=reallymakepkg
 _pkgname="${_pkg}"
 pkgname="${_pkgname}"
-_pkgver="1.2.2.1.1"
-_commit="37db830aa197b8c4b0396a434d2a50c12de8d502"
+_pkgver="1.2.3"
+_commit="029c51b25aa13a709f4c914537a55cf3e3ea19d4"
 pkgver="${_pkgver}"
 pkgrel=1
 pkgdesc="System-independent makepkg."
@@ -176,6 +176,9 @@ validpgpkeys=(
 )
 
 package() {
+  local \
+    _TERMUX_PREFIX
+  _TERMUX_PREFIX="/data/data/com.termux/files"
   cd \
     "${_tarname}"
   export \
@@ -188,6 +191,10 @@ package() {
   elif [[ "${_os}" == "Android" ]]; then
     _pkgdir="${pkgdir}"
   fi
+  mv \
+    "${pkgdir}/etc" \
+    "${pkgdir}${_TERMUX_PREFIX}" || \
+  true
   install \
     -vDm644 \
     "COPYING" \
