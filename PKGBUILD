@@ -45,6 +45,9 @@ if [[ ! -v "_evmfs" ]]; then
     _evmfs="false"
   fi
 fi
+_os="$( \
+  uname \
+    -o)"
 if [[ ! -v "_git" ]]; then
   _git="false"
 fi
