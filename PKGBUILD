@@ -60,7 +60,7 @@ _pkg=reallymakepkg
 _pkgname="${_pkg}"
 pkgname="${_pkgname}"
 _pkgver="1.2.3"
-_commit="029c51b25aa13a709f4c914537a55cf3e3ea19d4"
+_commit="941b9cf0a706597e4dfcdff3f0531350b93ebf01"
 pkgver="${_pkgver}"
 pkgrel=1
 pkgdesc="System-independent makepkg."
@@ -121,8 +121,8 @@ _tarname="${pkgname}-${_tag}"
 if [[ "${_offline}" == "true" ]]; then
   _url="file://${HOME}/${pkgname}"
 fi
-_archive_sum="be3fe06a34c0351252f5fe648fb6ffeb73fd3380bba0b2955b9504516bcbd3d8"
-_archive_sig_sum="59b9ecc0cb4ad5111640d9969ba948b1123c3697bbaa59c95d7fa05428cb4fec"
+_archive_sum="639d497492ebe458cf1e005e05439868d28eac20f3227a14a285c8c49cc3e7dc"
+_archive_sig_sum="6139fb5213bc6d55f66365b7023641280a29359e69afbb8618e711fe4e5b55bc"
 _evmfs_network="100"
 _evmfs_address="0x69470b18f8b8b5f92b48f6199dcb147b4be96571"
 _evmfs_ns="0x87003Bd6C074C713783df04f36517451fF34CBEf"
