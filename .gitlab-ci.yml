@@ -108,7 +108,7 @@ stages:
         700 \
         "/home/user"
       cp \
-        -r \
+        -vr \
         "/builds/themartiancompany/reallymakepkg-ur" \
         "/home/user"
       chown \
