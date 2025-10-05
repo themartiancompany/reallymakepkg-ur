@@ -1,0 +1,143 @@
+---
+
+# SPDX-License-Identifier: AGPL-3.0
+
+#
+#    .gitlab-ci.yaml
+#
+#    ----------------------------------------------------------------------
+#    Copyright © 2022, 2023, 2024, 2025
+#                Pellegrino Prevete
+#
+#    All rights reserved
+#    ----------------------------------------------------------------------
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+default:
+  image: archlinux:latest
+
+stages:
+  - build
+  # - check
+
+# check:
+#   before_script:
+#     - pacman \
+#         -Sy \
+#         --needed \
+#         --noconfirm \
+#           archlinux-keyring
+#     - pacman \
+#         -Syu \
+#         --noconfirm \
+#         --needed \
+#           make \
+#           shellcheck
+#   script:
+#     - make \
+#         check
+#   stage: check
+#   interruptible: true
+
+.build:
+  artifacts:
+    reports:
+      metrics: output/metrics.txt
+  before_script:
+    - >
+      pacman \
+        -Sy \
+        --needed \
+        --noconfirm \
+          archlinux-keyring
+    
+    - >  
+      pacman \
+        -Syu \
+        --needed \
+        --noconfirm \
+          bash \
+          git \
+          jq \
+          libisoburn \
+          python-docutils \
+          zsync
+
+    # Extra packages dependencies
+    # archiso-encryption-git
+    - >
+      pacman \
+        -Syu \
+        --needed \
+        --noconfirm \
+          asciidoctor \
+          fakeroot \
+          make \
+          shellcheck \
+          shfmt
+
+    # Save gl-dl private token in the
+    # container
+    - >
+      mkdir \
+        -p \
+        "/root/.config/gitlab.com"
+      echo \
+        "${GL_DL_PRIVATE_TOKEN}" > \
+        "/root/.config/gitlab.com/default.txt"
+  script:
+    - ./.gitlab/ci/build.sh ${BUILD_SCRIPT_ARGS}
+  stage: build
+  # tags:
+  #   - vm
+
+build_short:
+  extends: .build
+  parallel:
+    matrix:
+      - BUILD_SCRIPT_ARGS: arch x86_64
+      - BUILD_SCRIPT_ARGS: arch aarch64
+  only:
+    refs:
+      - master
+      - merge_requests
+    changes:
+      - PKGBUILD
+      - README.md
+      - COPYING
+      - .gitlab-ci.yml
+      - .gitlab/ci/*
+  interruptible: true
+
+build_long:
+  extends: .build
+  parallel:
+    matrix:
+      - BUILD_SCRIPT_ARGS: arch x86_64
+      - BUILD_SCRIPT_ARGS: arch aarch64
+      # - BUILD_SCRIPT_ARGS: arch armv7l
+      # - BUILD_SCRIPT_ARGS: arch aarch64
+  only:
+    refs:
+      - master
+      - merge_requests
+    changes:
+      - PKGBUILD
+      - README.md
+      - COPYING
+      - .gitlab-ci.yml
+      - .gitlab/ci/*
+  interruptible: true
