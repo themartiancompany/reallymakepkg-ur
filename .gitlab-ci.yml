@@ -110,7 +110,7 @@ stages:
       cp \
         -vr \
         "/builds/themartiancompany/reallymakepkg-ur" \
-        "/home/user"
+        "/home/user/reallymakepkg"
       chown \
         -R \
         "user:user" \
