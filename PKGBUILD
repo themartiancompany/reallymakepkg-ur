@@ -51,6 +51,9 @@ fi
 if [[ ! -v "_offline" ]]; then
   _offline="false"
 fi
+if [[ ! -v "_git_http" ]]; then
+  _git_http="gitlab"
+fi
 _py="python"
 _py2="${_py}2"
 _pkg=reallymakepkg
@@ -64,9 +67,9 @@ pkgdesc="System-independent makepkg."
 arch=(
   'any'
 )
-_repo="https://github.com"
+_repo="https://${_git_http}.com"
 _ns="themartiancompany"
-url="${_repo}/${_ns}/${pkgname}"
+url="${_repo}/${_ns}/${_pkg}"
 license=(
   'AGPL3'
 )
@@ -153,6 +156,7 @@ _evmfs_archive_src="${_tarname}.tar.gz::${_evmfs_archive_uri}"
 _archive_sig_uri="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}/${_archive_sig_sum}"
 _archive_sig_src="${_tarname}.tar.gz.sig::${_archive_sig_uri}"
 if [[ "${_evmfs}" == "true" ]]; then
+  if [[ "${_git}" == "false" ]]; then
   makedepends+=(
     "evmfs"
   )
@@ -164,19 +168,26 @@ if [[ "${_evmfs}" == "true" ]]; then
   sha256sums+=(
     "${_archive_sig_sum}"
   )
-elif [[ "${_git}" == true ]]; then
-  makedepends+=(
-    "git"
-  )
-  _src="${_tarname}::git+${_url}#${_tag_name}=${_tag}?signed"
-  _sum="SKIP"
-elif [[ "${_git}" == false ]]; then
-  if [[ "${_tag_name}" == 'pkgver' ]]; then
-    _src="${_tarname}.tar.gz::${_url}/archive/refs/tags/${_tag}.tar.gz"
-    _sum="d4f4179c6e4ce1702c5fe6af132669e8ec4d0378428f69518f2926b969663a91"
-  elif [[ "${_tag_name}" == "commit" ]]; then
-    _src="${_tarname}.zip::${_url}/archive/${_commit}.zip"
-    _sum="${_archive_sum}"
+  fi
+elif [[ "${_evmfs}" == "false" ]]; then
+  if [[ "${_git}" == "true" ]]; then
+    makedepends+=(
+      "git"
+    )
+    _src="${_tarname}::git+${_url}#${_tag_name}=${_tag}?signed"
+    _sum="SKIP"
+  elif [[ "${_git}" == "false" ]]; then
+    if [[ "${_git_http}" == "gitlab" ]]; then
+      if [[ "${_tag_name}" == 'pkgver' ]]; then
+        _src="${_tarname}.tar.gz::${_url}/archive/refs/tags/${_tag}.tar.gz"
+        _sum="d4f4179c6e4ce1702c5fe6af132669e8ec4d0378428f69518f2926b969663a91"
+      fi
+    elif [[ "${_git_http}" == "github" ]]; then
+      if [[ "${_tag_name}" == "commit" ]]; then
+        _src="${_tarname}.zip::${_url}/archive/${_commit}.zip"
+        _sum="${_archive_sum}"
+      fi
+    fi
   fi
 fi
 source=(
@@ -224,4 +235,4 @@ package() {
     "${_pkgdir}/usr/share/licenses/${pkgbase}"
 }
 
-# vim: ft=sh syn=sh et
+# vim: ft=2 syn=sh et
