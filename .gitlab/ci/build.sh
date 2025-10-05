@@ -101,10 +101,12 @@ _requirements() {
     "${_fur_opts[@]}" \
     "reallymakepkg"
   _gl_dl_mini_test
+  cd \
+    "reallymakepkg"
   reallymakepkg \
     -v \
     -w \
-      "${HOME}/fur-build" \
+      "${HOME}/reallymakepkg-build" \
     -- \
     -df \
     --nocheck

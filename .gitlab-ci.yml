@@ -72,9 +72,7 @@ stages:
           bash \
           git \
           jq \
-          libisoburn \
-          python-docutils \
-          zsync
+          python-docutils
 
     # Extra packages dependencies
     # archiso-encryption-git
@@ -98,6 +96,25 @@ stages:
       echo \
         "${GL_DL_PRIVATE_TOKEN}" > \
         "/root/.config/gitlab.com/default.txt"
+
+    # Setup user
+    - >
+      useradd \
+        "user"
+      mkdir \
+        -p \
+        "/home/user"
+      chmod \
+        700 \
+        "/home/user"
+      cp \
+        -r \
+        "/builds/themartiancompany/reallymakepkg-ur" \
+        "/home/user"
+      chown \
+        -R \
+        "user:user" \
+        "/home/user"
   script:
     - ./.gitlab/ci/build.sh ${BUILD_SCRIPT_ARGS}
   stage: build
