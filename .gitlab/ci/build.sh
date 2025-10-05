@@ -101,15 +101,31 @@ _requirements() {
     "${_fur_opts[@]}" \
     "reallymakepkg"
   _gl_dl_mini_test
-  cd \
-    "reallymakepkg"
-  reallymakepkg \
-    -v \
-    -w \
-      "${HOME}/reallymakepkg-build" \
-    -- \
-    -df \
+  echo \
+    "Current location: '${PWD}'"
+  ls \
+    "${PWD}"
+  _reallymakepkg_opts=(
+    -v
+    -w
+      "'${HOME}/reallymakepkg-build'"
+  )
+  _makepkg_opts+=(
+    -df
     --nocheck
+  )
+  _cmd=(
+    "cd"
+      "/home/user/reallymakepkg" "&&"
+    "reallymakepkg"
+      "${_reallymakepkg_opts[@]}"
+      "--"
+      "${_makepkg_opts[@]}"
+  )
+  su \
+    -c \
+    "${_cmd[*]}" - \
+    "user"
 }
 
 _gl_dl_mini_test() {
