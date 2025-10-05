@@ -101,11 +101,14 @@ _requirements() {
     "${_fur_opts[@]}" \
     "reallymakepkg"
   _gl_dl_mini_test
-  echo \
-    "Current location: '${PWD}'"
-  ls \
-    "${PWD}"
-  _reallymakepkg_opts=(
+}
+
+_build() {
+  local \
+    _reallymakepkg_opts=() \
+    _makepkg_opts=() \
+    _cmd=()
+  _reallymakepkg_opts+=(
     -v
     -w
       "'${HOME}/reallymakepkg-build'"
@@ -114,7 +117,7 @@ _requirements() {
     -df
     --nocheck
   )
-  _cmd=(
+  _cmd+=(
     "cd"
       "/home/user/reallymakepkg" "&&"
     "reallymakepkg"
@@ -178,5 +181,6 @@ readonly \
   arch="${2}"
 
 _requirements
+_build
 
 # vim:set sw=2 sts=-1 et:
