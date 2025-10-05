@@ -19,15 +19,12 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Maintainer:
+# Maintainers:
 #   Truocolo
 #     <truocolo@aol.com>
 #     <truocolo@0x6E5163fC4BFc1511Dbe06bB605cc14a3e462332b>
-# Maintainer:
 #   Pellegrino Prevete (tallero)
 #     <pellegrinoprevete@gmail.com>
-# Maintainer:
-#   Pellegrino Prevete (dvorak)
 #     <dvorak@0x87003Bd6C074C713783df04f36517451fF34CBEf>
 # Contributor:
 #   Marcell Meszaros (MarsSeed)
