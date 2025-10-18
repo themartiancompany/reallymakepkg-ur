@@ -54,6 +54,9 @@ fi
 if [[ ! -v "_git_http" ]]; then
   _git_http="gitlab"
 fi
+if [[ ! -v "_doc" ]]; then
+  _doc="true"
+fi
 if [[ "${_evmfs}" == "true" ]] || \
    [[ "${_git_http}" == "gitlab" ]]; then
   _archive_format="tar.gz"
@@ -64,12 +67,23 @@ _py="python"
 _py2="${_py}2"
 _pkg=reallymakepkg
 _pkgname="${_pkg}"
-pkgname="${_pkgname}"
+pkgbase="${_pkg}"
+pkgname=(
+  "${_pkg}"
+)
+if [[ "${_doc}" == "true" ]]; then
+  pkgname+=(
+    "${_pkg}-docs"
+  )
+fi
 _pkgver="1.2.4"
 _commit="5cca192a60552dbaf8443d5646ebe1ca1c8bbcd6"
 pkgver="${_pkgver}"
 pkgrel=1
-pkgdesc="System-independent makepkg."
+_pkgdesc=(
+  "System-independent makepkg."
+)
+pkgdesc="${_pkgdesc[*]}"
 arch=(
   'any'
 )
@@ -105,8 +119,12 @@ if [[ "${_os}" == 'Android' ]]; then
 fi
 makedepends=(
   'make'
-  "${_py}-docutils"
 )
+if [[ "${_doc}" == "true" ]]; then
+  makedepends+=(
+    "${_py}-docutils"
+  )
+fi
 provides=(
   "package-info-get=${pkgver}"
   "recipe-get=${pkgver}"
@@ -223,7 +241,11 @@ validpgpkeys=(
 
 package_reallymakepkg() {
   local \
-    _TERMUX_PREFIX
+    _TERMUX_PREFIX \
+    _make_opts=()
+  _make_opts+=(
+    DESTDIR="${pkgdir}"
+  )
   _TERMUX_PREFIX="/data/data/com.termux/files"
   conflicts=(
     "package-info-get"
@@ -234,8 +256,11 @@ package_reallymakepkg() {
   export \
     DESTDIR="${pkgdir}"
   make \
-    DESTDIR="${pkgdir}" \
-    install
+    "${_make_opts[@]}" \
+    install-configs
+  make \
+    "${_make_opts[@]}" \
+    install-scripts
   if [[ "${_os}" == "Android" ]]; then
     _pkgdir="${terdir}"
   elif [[ "${_os}" == "GNU/Linux" ]]; then
@@ -249,7 +274,33 @@ package_reallymakepkg() {
     -vDm644 \
     "COPYING" \
     -t \
-    "${_pkgdir}/usr/share/licenses/${pkgbase}"
+    "${_pkgdir}/usr/share/licenses/${pkgname}"
+}
+
+package_reallymakepkg-docs() {
+  local \
+    _TERMUX_PREFIX \
+    _make_opts=()
+  _make_opts+=(
+    DESTDIR="${pkgdir}"
+  )
+  _TERMUX_PREFIX="/data/data/com.termux/files"
+  pkgdesc="${_pkgdesc[*]} (documentation)."
+  cd \
+    "${_tarname}"
+  export \
+    DESTDIR="${pkgdir}"
+  make \
+    "${_make_opts[@]}" \
+    install-doc
+  make \
+    "${_make_opts[@]}" \
+    install-man
+  install \
+    -vDm644 \
+    "COPYING" \
+    -t \
+    "${_pkgdir}/usr/share/licenses/${pkgname}"
 }
 
 # vim: ft=2 syn=sh et
