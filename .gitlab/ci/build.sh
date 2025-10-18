@@ -158,25 +158,25 @@ _requirements() {
     -p
       "pacman"
   )
-  pacman \
-    -S \
-    --noconfirm \
-    "sudo"
+  # pacman \
+  #   -S \
+  #   --noconfirm \
+  #   "sudo"
   fur \
     "${_fur_opts[@]}" \
     "reallymakepkg"
-  recipe-get \
-    "/home/user/${_pkgname}/PKGBUILD" \
-    "_commit"
-  _commit="$( \
-    recipe-get \
-      "/home/user/${_pkgname}/PKGBUILD" \
-      "_commit")"
   _gur_mini \
     "${ns}" \
     "fur" \
     "1.0.0.0.0.0.0.0.0.0.0.0.0.1.1.1.1-2"
   # ohoh
+  recipe-get \
+      "/home/user/${_pkgname}/PKGBUILD" \
+      "_commit"
+  _commit="$( \
+    recipe-get \
+      "/home/user/${_pkgname}/PKGBUILD" \
+      "_commit")"
   _gl_dl_mini \
     "${ns}" \
     "${_pkgname}" \
