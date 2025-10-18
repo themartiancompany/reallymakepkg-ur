@@ -273,20 +273,20 @@ _gl_dl_retrieve() {
     _curl_opts=() \
     _output_file \
     _msg=() \
-    _missing_token
+    _token_missing
   _output_file="${HOME}/$( \
     basename \
       "${_url#https://}")"
   _token_private="${HOME}/.config/gitlab.com/default.txt"
-  _missing_token="false"
+  _token_missing="false"
   if [[ ! -e "${_token_private}" ]]; then
-    _missing_token="true"
+    _token_missing="true"
   elif [[ -e "${_token_private}" ]]; then
     if [[ "$(cat "${_token_private}")" == ""  ]]; then
-      _missing_token="true"
+      _token_missing="true"
     fi
   fi
-  if [[ "${_missing_token}" == "true" ]]; then
+  if [[ "${_token_missing}" == "true" ]]; then
     _msg=(
       "Missing private token at"
       "'${_token_private}'."
