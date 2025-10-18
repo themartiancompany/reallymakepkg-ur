@@ -82,8 +82,11 @@ license=(
 depends=(
   'binutils'
   'bash'
+  'gawk'
   'libcrash-bash'
   'pacman'
+  'sed'
+  'tar'
 )
 if [[ "${_os}" == 'Android' ]]; then
   depends+=(
@@ -102,6 +105,7 @@ if [[ "${_os}" == 'Android' ]]; then
 fi
 makedepends=(
   'make'
+  "${_py}-docutils"
 )
 provides=(
   "package-info-get=${pkgver}"
