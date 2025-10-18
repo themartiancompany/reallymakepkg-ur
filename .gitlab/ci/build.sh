@@ -162,10 +162,16 @@ _requirements() {
   fur \
     "${_fur_opts[@]}" \
     "reallymakepkg"
+  # For the gur mini to work,
+  # fur version 1.0.0.0.0.0.0.0.0.0.0.0.0.1.1.1.1-2
+  # must have been purchased and the repo
+  # must have been published on gitlab
+  # on user's namespace
   _gur_mini \
     "${ns}" \
     "fur" \
-    "1.0.0.0.0.0.0.0.0.0.0.0.0.1.1.1.1-2"
+    "1.0.0.0.0.0.0.0.0.0.0.0.0.1.1.1.1-2" || \
+  true
   # ohoh
   recipe-get \
     -v \
