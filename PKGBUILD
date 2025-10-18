@@ -59,8 +59,8 @@ _py2="${_py}2"
 _pkg=reallymakepkg
 _pkgname="${_pkg}"
 pkgname="${_pkgname}"
-_pkgver="1.2.3"
-_commit="941b9cf0a706597e4dfcdff3f0531350b93ebf01"
+_pkgver="1.2.4"
+_commit="5cca192a60552dbaf8443d5646ebe1ca1c8bbcd6"
 pkgver="${_pkgver}"
 pkgrel=1
 pkgdesc="System-independent makepkg."
@@ -98,6 +98,7 @@ makedepends=(
   'make'
 )
 provides=(
+  "package-info-get=${pkgver}"
   "recipe-get=${pkgver}"
   "termux-install-shared=${pkgver}"
 )
@@ -208,10 +209,14 @@ validpgpkeys=(
   '12D8E3D7888F741E89F86EE0FEC8567A644F1D16'
 )
 
-package() {
+package_reallymakepkg() {
   local \
     _TERMUX_PREFIX
   _TERMUX_PREFIX="/data/data/com.termux/files"
+  conflicts=(
+    "package-info-get"
+    "recipe-get"
+  )
   cd \
     "${_tarname}"
   export \
