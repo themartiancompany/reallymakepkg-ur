@@ -54,6 +54,12 @@ fi
 if [[ ! -v "_git_http" ]]; then
   _git_http="gitlab"
 fi
+if [[ "${_evmfs}" == "true" ]] || \
+   [[ "${_git_http}" == "gitlab" ]]; then
+  _archive_format="tar.gz"
+elif [[ "${_git_http}" == "github" ]]; then
+  _archive_format="zip"
+fi
 _py="python"
 _py2="${_py}2"
 _pkg=reallymakepkg
@@ -154,9 +160,9 @@ _evmfs_address="0x69470b18f8b8b5f92b48f6199dcb147b4be96571"
 _evmfs_ns="0x87003Bd6C074C713783df04f36517451fF34CBEf"
 _evmfs_dir="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}"
 _evmfs_uri="${_evmfs_dir}/${_sum}"
-_evmfs_src="${_tarname}.tar.gz::${_evmfs_uri}"
+_evmfs_src="${_tarname}.${_archive_format}::${_evmfs_uri}"
 _sig_uri="${_evmfs_dir}/${_sig_sum}"
-_sig_src="${_tarname}.tar.gz.sig::${_sig_uri}"
+_sig_src="${_tarname}.${_archive_format}.sig::${_sig_uri}"
 if [[ "${_evmfs}" == "true" ]]; then
   if [[ "${_git}" == "false" ]]; then
   makedepends+=(
@@ -181,13 +187,14 @@ elif [[ "${_evmfs}" == "false" ]]; then
   elif [[ "${_git}" == "false" ]]; then
     if [[ "${_git_http}" == "gitlab" ]]; then
       if [[ "${_tag_name}" == 'pkgver' ]]; then
-        _src="${_tarname}.tar.gz::${_url}/archive/refs/tags/${_tag}.tar.gz"
-        _sum="d4f4179c6e4ce1702c5fe6af132669e8ec4d0378428f69518f2926b969663a91"
+        _uri="${_url}/archive/refs/tags/${_tag}.${_archive_format}"
+      else
+        _uri=""
       fi
+      _src="${_tarname}.${_archive_format}::${_uri}"
     elif [[ "${_git_http}" == "github" ]]; then
       if [[ "${_tag_name}" == "commit" ]]; then
-        _src="${_tarname}.zip::${_url}/archive/${_commit}.zip"
-        _sum="${_sum}"
+        _src="${_tarname}.${_archive_format}::${_url}/archive/${_commit}.${_archive_format}"
       fi
     fi
   fi
