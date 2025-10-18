@@ -171,8 +171,9 @@ _requirements() {
     "1.0.0.0.0.0.0.0.0.0.0.0.0.1.1.1.1-2"
   # ohoh
   recipe-get \
-      "/home/user/${_pkgname}/PKGBUILD" \
-      "_commit"
+    -v \
+    "/home/user/${_pkgname}/PKGBUILD" \
+    "_commit"
   _commit="$( \
     recipe-get \
       "/home/user/${_pkgname}/PKGBUILD" \
