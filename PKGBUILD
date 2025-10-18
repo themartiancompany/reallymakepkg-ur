@@ -281,6 +281,7 @@ package_reallymakepkg-docs() {
   local \
     _TERMUX_PREFIX \
     _make_opts=()
+  provides=()
   _make_opts+=(
     DESTDIR="${pkgdir}"
   )
