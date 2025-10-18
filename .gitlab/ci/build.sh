@@ -53,9 +53,6 @@ _gur_mini() {
     "${_msg[*]}"
   _gl_dl_retrieve \
     "https://gitlab.com/api/v4/projects/${_ns}%2F${_pkg}-ur"
-  ls
-  cat \
-    "${HOME}/${_ns}%2F${_pkg}-ur"
   _project_id="$( \
     cat \
       "${HOME}/${_ns}%2F${_pkg}-ur" | \
@@ -275,12 +272,21 @@ _gl_dl_retrieve() {
     _token \
     _curl_opts=() \
     _output_file \
-    _msg=()
+    _msg=() \
+    _missing_token
   _output_file="${HOME}/$( \
     basename \
       "${_url#https://}")"
   _token_private="${HOME}/.config/gitlab.com/default.txt"
+  _missing_token="false"
   if [[ ! -e "${_token_private}" ]]; then
+    _missing_token="true"
+  elif [[ -e "${_token_private}" ]]; then
+    if [[ "$(cat "${_token_private}")" == ""  ]]; then
+      _missing_token="true"
+    fi
+  fi
+  if [[ "${_missing_token}" == "true" ]]; then
     _msg=(
       "Missing private token at"
       "'${_token_private}'."
@@ -290,10 +296,12 @@ _gl_dl_retrieve() {
     _msg=(
       "Set the 'GL_DL_PRIVATE_TOKEN'"
       "variable in your Gitlab.com" \
-      "CI namespace configuration."
+      "CI namespace or repository configuration."
     )
     echo \
       "${_msg[*]}"
+    exit \
+      1
   fi
   _token="PRIVATE-TOKEN: $( \
     cat \
