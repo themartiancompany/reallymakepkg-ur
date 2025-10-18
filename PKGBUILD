@@ -147,27 +147,28 @@ _tarname="${_pkg}-${_tag}"
 if [[ "${_offline}" == "true" ]]; then
   _url="file://${HOME}/${_pkg}"
 fi
-_archive_sum="639d497492ebe458cf1e005e05439868d28eac20f3227a14a285c8c49cc3e7dc"
-_archive_sig_sum="6139fb5213bc6d55f66365b7023641280a29359e69afbb8618e711fe4e5b55bc"
+_sum="d78883e0cb618fac275718b6707084e543a9a18bf4384b13e5051c45af4b68f0"
+_sig_sum="45436848e5d2f1d6f2c92a6c3cb2e91ce07b1dbedaa85015f0c5fbae5de06ff4"
 _evmfs_network="100"
 _evmfs_address="0x69470b18f8b8b5f92b48f6199dcb147b4be96571"
 _evmfs_ns="0x87003Bd6C074C713783df04f36517451fF34CBEf"
-_evmfs_archive_uri="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}/${_archive_sum}"
-_evmfs_archive_src="${_tarname}.tar.gz::${_evmfs_archive_uri}"
-_archive_sig_uri="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}/${_archive_sig_sum}"
-_archive_sig_src="${_tarname}.tar.gz.sig::${_archive_sig_uri}"
+_evmfs_dir="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}"
+_evmfs_uri="${_evmfs_dir}/${_sum}"
+_evmfs_src="${_tarname}.tar.gz::${_evmfs_uri}"
+_sig_uri="${_evmfs_dir}/${_sig_sum}"
+_sig_src="${_tarname}.tar.gz.sig::${_sig_uri}"
 if [[ "${_evmfs}" == "true" ]]; then
   if [[ "${_git}" == "false" ]]; then
   makedepends+=(
     "evmfs"
   )
-  _src="${_evmfs_archive_src}"
-  _sum="${_archive_sum}"
+  _src="${_evmfs_src}"
+  _sum="${_sum}"
   source+=(
-    "${_archive_sig_src}"
+    "${_sig_src}"
   )
   sha256sums+=(
-    "${_archive_sig_sum}"
+    "${_sig_sum}"
   )
   fi
 elif [[ "${_evmfs}" == "false" ]]; then
@@ -186,7 +187,7 @@ elif [[ "${_evmfs}" == "false" ]]; then
     elif [[ "${_git_http}" == "github" ]]; then
       if [[ "${_tag_name}" == "commit" ]]; then
         _src="${_tarname}.zip::${_url}/archive/${_commit}.zip"
-        _sum="${_archive_sum}"
+        _sum="${_sum}"
       fi
     fi
   fi
