@@ -165,6 +165,9 @@ _requirements() {
   fur \
     "${_fur_opts[@]}" \
     "reallymakepkg"
+  recipe-get \
+    "/home/user/${_pkgname}/PKGBUILD" \
+    "_commit"
   _commit="$( \
     recipe-get \
       "/home/user/${_pkgname}/PKGBUILD" \
