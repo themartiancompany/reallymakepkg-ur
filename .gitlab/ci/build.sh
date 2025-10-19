@@ -306,7 +306,7 @@ _gl_dl_retrieve() {
     )
     echo \
       "${_msg[*]}"
-    exit \
+    return \
       1
   fi
   _token="PRIVATE-TOKEN: $( \
