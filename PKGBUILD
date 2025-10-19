@@ -76,8 +76,8 @@ if [[ "${_doc}" == "true" ]]; then
     "${_pkg}-docs"
   )
 fi
-_pkgver="1.2.4"
-_commit="5cca192a60552dbaf8443d5646ebe1ca1c8bbcd6"
+_pkgver="1.2.5"
+_commit="526b0f423cd3c826db44f357ac3c819e4987e8ff"
 pkgver="${_pkgver}"
 pkgrel=1
 _pkgdesc=(
