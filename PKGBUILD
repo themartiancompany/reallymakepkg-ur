@@ -191,7 +191,6 @@ if [[ "${_evmfs}" == "true" ]]; then
     "evmfs"
   )
   _src="${_evmfs_src}"
-  _sum="${_sum}"
   source+=(
     "${_sig_src}"
   )
