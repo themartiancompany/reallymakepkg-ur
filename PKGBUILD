@@ -30,7 +30,7 @@
 #   Marcell Meszaros (MarsSeed)
 #     <marcell.meszaros@runbox.eu>
 
-_evmfs_available="$( \
+_evmfs_available="$(
   command \
     -v \
     "evmfs" || \
@@ -42,7 +42,7 @@ if [[ ! -v "_evmfs" ]]; then
     _evmfs="false"
   fi
 fi
-_os="$( \
+_os="$(
   uname \
     -o)"
 if [[ ! -v "_git" ]]; then
