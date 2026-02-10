@@ -88,7 +88,9 @@ arch=(
   'any'
 )
 _repo="https://${_git_http}.com"
-_ns="themartiancompany"
+if [[ ! -v "_ns" ]]; then
+  _ns="themartiancompany"
+fi
 url="${_repo}/${_ns}/${_pkg}"
 license=(
   'AGPL3'
