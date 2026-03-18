@@ -323,6 +323,42 @@ jobs:
               -rf \
               "${HOME}/fur"
       - name:
+          Installs latest Reallymakepkg.
+        run: |
+          /entrypoint.sh \
+            git \
+              clone \
+                "https://github.com/themartiancompany/reallymakepkg-src" || \
+              true
+          /entrypoint.sh \
+            make \
+              -C \
+              "reallymakepkg-src" \
+              install
+          /entrypoint.sh \
+            fur \
+              -v \
+              -p \
+                "pacman" \
+              -d \
+              "reallymakepkg"
+          /entrypoint.sh \
+            rm \
+              "${HOME}/fur/termux/any/"*".pkg.tar."*".sig"
+          /entrypoint.sh \
+            tree \
+              "${HOME}"
+          /entrypoint.sh \
+            pacman \
+              -Udd \
+              --noconfirm \
+              "${HOME}/fur/termux/any/"*".pkg.tar."*
+          /entrypoint.sh \
+            rm \
+              -rf \
+              "${HOME}/fur"
+ 
+      - name:
           Installs 'build essential' ahah.
         run: |
           /entrypoint.sh \
