@@ -656,27 +656,32 @@ jobs:
                 ${_pkgs} \
                 --overwrite="*" || \
             true
-          /entrypoint.sh \
-            bash \
-              "${HOME}/fur-src/fur/fur" \
-                -v \
-                -t \
-                  "ci" \
-                -m \
-                  "github" \
-                -p \
-                  "pacman" \
-                "libassuan"
+          # /entrypoint.sh \
+          #   bash \
+          #     "${HOME}/fur-src/fur/fur" \
+          #       -v \
+          #       -t \
+          #         "ci" \
+          #       -m \
+          #         "github" \
+          #       -p \
+          #         "pacman" \
+          #       "libassuan"
       - name:
           Builds the package.
         run: |
+          export \
+            _pkgbase"$( \
+              recipe-get \
+                "PKGBUILD" \
+                "pkgbase")"
           /entrypoint.sh \
             TERMUX_VERSION="50" \
             _evmfs="false" \
             reallymakepkg \
               -v \
               -w \
-                "${HOME}/fur-git-build" \
+                "${HOME}/${_pkgbase}-build" \
               -- \
               -df \
               --nocheck \
@@ -726,7 +731,11 @@ jobs:
               _evmfs="false" \
               recipe-get \
                 "PKGBUILD" \
-                "pkgver")"
+                "pkgver")-$( \
+              _evmfs="false" \
+              recipe-get \
+                "PKGBUILD" \
+                "pkgrel")"
         id:
           version
       - uses:
@@ -735,7 +744,7 @@ jobs:
           name:
             artifact-${{ matrix.platform }}-${{ matrix.architecture }}
           path:
-            fur-git-${{ steps.version.outputs.version }}-any.pkg.tar.xz
+            reallymakepkg-${{ steps.version.outputs.version }}-any.pkg.tar.xz
       # - name:
       #     Upload Termux package.
       #   uses:
@@ -1270,16 +1279,16 @@ jobs:
               "${_pkgs[@]}" \
               --overwrite="*" || \
             true
-          bash \
-            "${HOME}/fur-src/fur/fur" \
-              -v \
-              -t \
-                "ci" \
-              -m \
-                "github" \
-              -p \
-                "pacman" \
-              "libassuan"
+          # bash \
+          #   "${HOME}/fur-src/fur/fur" \
+          #     -v \
+          #     -t \
+          #       "ci" \
+          #     -m \
+          #       "github" \
+          #     -p \
+          #       "pacman" \
+          #     "libassuan"
       - name:
           Builds the package.
         run: |
@@ -1322,6 +1331,10 @@ jobs:
             _evmfs="false" \
             recipe-get \
               "PKGBUILD" \
+              "pkgver")-$( \
+            _evmfs="false" \
+            recipe-get \
+              "PKGBUILD" \
               "pkgver")"
         id:
           version
@@ -1331,7 +1344,7 @@ jobs:
           name:
             artifact-${{ matrix.platform }}-${{ matrix.architecture }}
           path:
-            fur-git-${{ steps.version.outputs.version }}-any.pkg.tar.xz
+            reallymakepkg-${{ steps.version.outputs.version }}-any.pkg.tar.xz
   msys2:
     name:
       Life and DogeOS Windows base packages (CI).
@@ -1504,15 +1517,15 @@ jobs:
               --overwrite="*" || \
               true
           done
-          fur \
-            -v \
-            -t \
-              "ci" \
-            -m \
-              "github" \
-            -p \
-              "pacman" \
-            "libassuan"
+          # fur \
+          #   -v \
+          #   -t \
+          #     "ci" \
+          #   -m \
+          #     "github" \
+          #   -p \
+          #     "pacman" \
+          #   "libassuan"
       - name:
           Builds the package.
         run: |
@@ -1553,7 +1566,12 @@ jobs:
               _evmfs="false" \
               "reallymakepkg/reallymakepkg/recipe-get" \
                 "PKGBUILD" \
-                "pkgver")"
+                "pkgver")-$( \
+            bash \
+              _evmfs="false" \
+              "reallymakepkg/reallymakepkg/recipe-get" \
+                "PKGBUILD" \
+                "pkgrel")"
         id:
           version
       - uses:
@@ -1562,7 +1580,7 @@ jobs:
           name:
             artifact-${{ matrix.sys }}-${{ matrix.env }}
           path:
-            fur-git-${{ steps.version.outputs.version }}-any.pkg.tar.xz
+            reallymakepkg-${{ steps.version.outputs.version }}-any.pkg.tar.xz
   # This is the ideal way termux-docker would work with GHA.
   broken-ideal:
     name:
