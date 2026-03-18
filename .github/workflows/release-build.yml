@@ -721,6 +721,7 @@ jobs:
             _evmfs="false" \
             _git="true" \
             TERMUX_VERSION=50 \
+            _git_http="github" \
             reallymakepkg \
               -v \
               -w \
@@ -1314,7 +1315,7 @@ jobs:
         run: |
           su \
             -c \
-              "cd $(pwd) && _evmfs="false" reallymakepkg -v -u -w '/home/user/${_pkgbase}-build' -- -df --nocheck --skippgpcheck" - \
+              "cd $(pwd) && _evmfs="false" _git_http="github" reallymakepkg -v -u -w '/home/user/${_pkgbase}-build' -- -df --nocheck --skippgpcheck" - \
             "user"
       # - name:
       #     Installs the package.
@@ -1579,6 +1580,7 @@ jobs:
           #   -df \
           #   --nocheck
           _evmfs="false" \
+          _git_http="github" \
           makepkg \
             -df \
             --nocheck \
