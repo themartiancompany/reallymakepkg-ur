@@ -175,12 +175,12 @@ jobs:
           #       export \
           #         _rust="${_rust}" \
           #     fi && \
-          /entrypoint.sh \
-            apt \
-              install \
-                -y \
-                "rust" \
-                "rust-std-armv7-linux-androideabi"
+          # /entrypoint.sh \
+          #   apt \
+          #     install \
+          #       -y \
+          #       "rust" \
+          #       "rust-std-armv7-linux-androideabi"
       - name:
           Installs Git.
         run: |
@@ -246,7 +246,8 @@ jobs:
                 --single-branch \
                 --depth=1 \
                 "https://github.com/themartiancompany/fur" \
-                "${HOME}/fur"
+                "${HOME}/fur" || \
+            true
           /entrypoint.sh \
             rm \
               "${HOME}/fur/termux/any/"*".pkg.tar."*".sig"
@@ -260,7 +261,7 @@ jobs:
               -rf \
               "${HOME}/fur"
       - name:
-          Installs latest Fur.
+          Downloads latest Fur.
         run: |
           /entrypoint.sh \
             git \
@@ -269,7 +270,8 @@ jobs:
                 --single-branch \
                 --depth=1 \
                 "https://github.com/themartiancompany/fur" \
-                "${HOME}/fur-src"
+                "${HOME}/fur-src" || \
+            true
       - name:
           Installs Python Pygments.
         run: |
@@ -674,11 +676,11 @@ jobs:
                 "${HOME}/fur-src" || \
             true
           cd \
-            "fur-src"
+            "${HOME}/fur-src"
           /entrypoint.sh \
             make \
               PREFIX="/usr" \
-              install 
+              install-fur
       - name:
           Installs build dependencies.
         run: |
