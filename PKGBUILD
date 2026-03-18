@@ -92,7 +92,9 @@ arch=(
   'any'
 )
 _repo="https://${_git_http}.com"
-_ns="themartiancompany"
+if [[ ! -v "_ns" ]]; then
+  _ns="themartiancompany"
+fi
 url="${_repo}/${_ns}/${_pkg}"
 license=(
   'AGPL3'
@@ -213,6 +215,8 @@ elif [[ "${_evmfs}" == "false" ]]; then
     if [[ "${_git_http}" == "gitlab" ]]; then
       if [[ "${_tag_name}" == 'pkgver' ]]; then
         _uri="${_url}/archive/refs/tags/${_tag}.${_archive_format}"
+      elif [[ "${_tag_name}" == "commit" ]]; then
+        _uri="${_url}/-/archive/${_tag}/${_tag}.${_archive_format}"
       else
         _uri=""
       fi
