@@ -270,7 +270,8 @@ jobs:
                 --single-branch \
                 --depth=1 \
                 "https://github.com/themartiancompany/fur" \
-                "${HOME}/fur-src"
+                "${HOME}/fur-src" || \
+            true
       - name:
           Installs Python Pygments.
         run: |
@@ -1476,9 +1477,10 @@ jobs:
               --single-branch \
               --depth=1 \
               "https://github.com/themartiancompany/fur" \
-              "fur-src"
+              "${HOME}/fur-src" || \
+          true
           cd \
-            "fur-src"
+            "${HOME}/fur-src"
           make \
             PREFIX="/usr" \
             install-fur
