@@ -796,9 +796,9 @@ jobs:
             ${{ github.event.release.upload_url }}
             # ${{ steps.create_release.outputs.upload_url }}
           asset_path:
-            libassuan-${{ steps.version.outputs.version }}-${{ matrix.architecture }}.pkg.tar.xz
+            reallymakepkg-${{ steps.version.outputs.version }}-${{ matrix.architecture }}.pkg.tar.xz
           asset_name:
-            dogeos-android-libassuan-${{ steps.version.outputs.version }}-${{ matrix.architecture }}.pkg.tar.xz
+            dogeos-android-reallymakepkg-${{ steps.version.outputs.version }}-${{ matrix.architecture }}.pkg.tar.xz
           asset_content_type:
             application/gzip
   arch_release:
@@ -1363,9 +1363,9 @@ jobs:
             ${{ github.event.release.upload_url }}
             # ${{ steps.create_release.outputs.upload_url }}
           asset_path:
-            libassuan-${{ steps.version.outputs.version }}-x86_64.pkg.tar.xz
+            reallymakepkg-${{ steps.version.outputs.version }}-x86_64.pkg.tar.xz
           asset_name:
-            dogeos-gnu-libassuan-${{ steps.version.outputs.version }}-x86_64.pkg.tar.xz
+            dogeos-gnu-reallymakepkg-${{ steps.version.outputs.version }}-x86_64.pkg.tar.xz
           asset_content_type:
             application/gzip
   msys2_release:
@@ -1587,7 +1587,7 @@ jobs:
           # reallymakepkg \
           #   -v \
           #   -w \
-          #     "${HOME}/libassuan-git-build" \
+          #     "${HOME}/reallymakepkg-git-build" \
           #   -u \
           #   -- \
           #   -df \
@@ -1651,9 +1651,9 @@ jobs:
             ${{ github.event.release.upload_url }}
             # ${{ steps.create_release.outputs.upload_url }}
           asset_path:
-            libassuan-${{ steps.version.outputs.version }}-${{ matrix.env }}.pkg.tar.xz
+            reallymakepkg-${{ steps.version.outputs.version }}-${{ matrix.env }}.pkg.tar.xz
           asset_name:
-            dogeos-windows-libassuan-${{ steps.version.outputs.version }}-${{ matrix.env }}.pkg.tar.xz
+            dogeos-windows-reallymakepkg-${{ steps.version.outputs.version }}-${{ matrix.env }}.pkg.tar.xz
           asset_content_type:
             application/gzip
 
