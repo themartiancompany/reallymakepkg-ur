@@ -83,7 +83,7 @@ fi
 _pkgver="1.2.5"
 _commit="526b0f423cd3c826db44f357ac3c819e4987e8ff"
 pkgver="${_pkgver}"
-pkgrel=16
+pkgrel=17
 _pkgdesc=(
   "System-independent makepkg."
 )
