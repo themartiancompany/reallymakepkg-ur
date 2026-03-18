@@ -181,10 +181,20 @@ _tarname="${_pkg}-${_tag}"
 if [[ "${_offline}" == "true" ]]; then
   _url="file://${HOME}/${_pkg}"
 fi
-_sum="6b70dd2f6c347d448c2d6140fdb70429d17135e6713ea6c095df1b34e4010e6a"
-_sig_sum="75e32fa522ae3e2a82993ef9bdf5a9c312860078264fba06cebf920349a914ec"
+_gitlab_sum="6b70dd2f6c347d448c2d6140fdb70429d17135e6713ea6c095df1b34e4010e6a"
+_gitlab_sig_sum="75e32fa522ae3e2a82993ef9bdf5a9c312860078264fba06cebf920349a914ec"
+_github_sum="d1d11ff21c06107e3760a2d389cb78dd4e5d94703e25b58bfdf012b364f7f6d9"
+_github_sig_sum="f1f1a26bb24cd09867e629e1c935b569e8ca4b6bad19db8520ff816dc2ff5e25"
+if [[ "${_git_http}" == "github" ]]; then
+  _sum="${_github_sum}"
+  _sig_sum="${_github_sig_sum}"
+elif [[ "${_git_http}" == "gitlab" ]]; then
+  _sum="${_gitlab_sum}"
+  _sig_sum="${_gitlab_sig_sum}"
+fi
 _evmfs_network="100"
 _evmfs_address="0x69470b18f8b8b5f92b48f6199dcb147b4be96571"
+# Dvorak
 _evmfs_ns="0x87003Bd6C074C713783df04f36517451fF34CBEf"
 _evmfs_dir="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}"
 _evmfs_uri="${_evmfs_dir}/${_sum}"
