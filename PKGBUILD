@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: AGPL-3.0
+#b SPDX-License-Identifier: AGPL-3.0
 
 #    ------------------------------------------------------------
 #    Copyright © 2023, 2024, 2025, 2026
@@ -86,7 +86,7 @@ fi
 _pkgver="1.2.5"
 _commit="526b0f423cd3c826db44f357ac3c819e4987e8ff"
 pkgver="${_pkgver}"
-pkgrel=19
+pkgrel=20
 _pkgdesc=(
   "System-independent makepkg."
 )
