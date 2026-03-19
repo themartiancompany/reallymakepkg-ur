@@ -769,6 +769,7 @@ jobs:
           /entrypoint.sh \
             _evmfs="false" \
             _git="true" \
+            _git_http="github" \
             makepkg \
               --nobuild \
               -df \

@@ -328,36 +328,14 @@ jobs:
           /entrypoint.sh \
             git \
               clone \
-                "https://github.com/themartiancompany/reallymakepkg-src" || \
+                "https://github.com/themartiancompany/reallymakepkg" \
+                "reallymakepkg-src" || \
               true
           /entrypoint.sh \
             make \
               -C \
-              "reallymakepkg-src" \
+                "reallymakepkg-src" \
               install
-          /entrypoint.sh \
-            fur \
-              -v \
-              -p \
-                "pacman" \
-              -d \
-              "reallymakepkg"
-          /entrypoint.sh \
-            rm \
-              "${HOME}/fur/termux/any/"*".pkg.tar."*".sig"
-          /entrypoint.sh \
-            tree \
-              "${HOME}"
-          /entrypoint.sh \
-            pacman \
-              -Udd \
-              --noconfirm \
-              "${HOME}/fur/termux/any/"*".pkg.tar."*
-          /entrypoint.sh \
-            rm \
-              -rf \
-              "${HOME}/fur"
- 
       - name:
           Installs 'build essential' ahah.
         run: |
@@ -715,6 +693,7 @@ jobs:
           /entrypoint.sh \
             TERMUX_VERSION="50" \
             _evmfs="false" \
+            _git_http="github" \
             reallymakepkg \
               -v \
               -w \
@@ -1286,10 +1265,11 @@ jobs:
               --single-branch \
               --depth=1 \
               "https://github.com/themartiancompany/fur" \
-              "${HOME}/fur-src"
-          cd \
-            "${HOME}/fur-src"
+              "${HOME}/fur-src" || \
+            true
           make \
+            -C \
+              "${HOME}/fur-src"
             PREFIX="/usr" \
             install-fur
       # - name:
@@ -1331,7 +1311,7 @@ jobs:
         run: |
           su \
             -c \
-              "cd '$(pwd)' && _evmfs="false" makepkg -df --nocheck --skippgpcheck" - \
+              "cd '$(pwd)' && _evmfs="false" _git_http="github" makepkg -df --nocheck --skippgpcheck" - \
             "user"
       # - name:
       #     Installs the package.
@@ -1570,6 +1550,7 @@ jobs:
           dos2unix \
             "PKGBUILD"
           _evmfs="false" \
+          _git_http="github" \
           makepkg \
             -df \
             --nocheck \
