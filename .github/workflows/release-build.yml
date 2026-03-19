@@ -146,41 +146,58 @@ jobs:
               install \
                 -y \
                 "python"
-      - name:
-          Installs Rust.
-        run: |
-          # env 
-          #   _arch="$( \
-          #     uname \
-          #       -m)" \
-          #   export \
-          #     _arch="$( \
-          #       uname \
-          #         -m)" && \
-          #   /entrypoint.sh \
-          #     echo \
-          #       "Architecture: ${_arch}" && \
-          #     if [[ "$(uname -m)" == "armv7l" || \
-          #           "$(uname -m)" == "armv8l" ]]; then \
-          #       _rust="rust-std-armv7-linux-androideabi" \
-          #     fi \
-          #     if [[ "${RUNNER_ARCH}" == "X64" ]]; then \
-          #       _rust="rust" && \
-          #       export \
-          #         _rust="${_rust}" \
-          #     fi \
-          #     if [[ "$(uname -m)" == "i686" || \
-          #           "$(uname -m)" == "aarch64" ]]; then \
-          #       _rust="rust" && \
-          #       export \
-          #         _rust="${_rust}" \
-          #     fi && \
-          # /entrypoint.sh \
-          #   apt \
-          #     install \
-          #       -y \
-          #       "rust" \
-          #       "rust-std-armv7-linux-androideabi"
+          /entrypoint.sh \
+            pkg \
+              install \
+                -y \
+                "python-pip"
+          /entrypoint.sh \
+            pip \
+              install \
+                "build"
+          /entrypoint.sh \
+            pip \
+              install \
+                "installer"
+          /entrypoint.sh \
+            pip \
+              install \
+                "flit-core"
+      # - name:
+      #     Installs Rust.
+      #   run: |
+      #     env 
+      #       _arch="$( \
+      #         uname \
+      #           -m)" \
+      #       export \
+      #         _arch="$( \
+      #           uname \
+      #             -m)" && \
+      #       /entrypoint.sh \
+      #         echo \
+      #           "Architecture: ${_arch}" && \
+      #         if [[ "$(uname -m)" == "armv7l" || \
+      #               "$(uname -m)" == "armv8l" ]]; then \
+      #           _rust="rust-std-armv7-linux-androideabi" \
+      #         fi \
+      #         if [[ "${RUNNER_ARCH}" == "X64" ]]; then \
+      #           _rust="rust" && \
+      #           export \
+      #             _rust="${_rust}" \
+      #         fi \
+      #         if [[ "$(uname -m)" == "i686" || \
+      #               "$(uname -m)" == "aarch64" ]]; then \
+      #           _rust="rust" && \
+      #           export \
+      #             _rust="${_rust}" \
+      #         fi && \
+      #     /entrypoint.sh \
+      #       apt \
+      #         install \
+      #           -y \
+      #           "rust" \
+      #           "rust-std-armv7-linux-androideabi"
       - name:
           Installs Git.
         run: |
@@ -191,14 +208,14 @@ jobs:
                 "git" \
                 "jq" \
                 "tree"
-      - name:
-          Installs Capnproto.
-        run: |
-          /entrypoint.sh \
-            pkg \
-              install \
-                -y \
-                "capnproto"
+      # - name:
+      #     Installs Capnproto.
+      #   run: |
+      #     /entrypoint.sh \
+      #       pkg \
+      #         install \
+      #           -y \
+      #           "capnproto"
       - name:
           Installs Pacman.
         run: |
@@ -647,6 +664,12 @@ jobs:
               -Sy || \
             true
       - name:
+          Install docutils.
+        run: |
+          pip \
+            install \
+              "docutils"
+      - name:
           Read pkgbase.
         run: |
           export \
@@ -719,15 +742,25 @@ jobs:
       - name:
           Builds the package.
         run: |
+          export \
+            _pkgbase="$( \
+              /entrypoint.sh \
+                recipe-get \
+                  "PKGBUILD" \
+                  "pkgbase")"
+          /entrypoint.sh \
+            mkdir \
+              -p \
+              "${HOME}/${_pkgbase}-build"
           /entrypoint.sh \
             _evmfs="false" \
             _git="true" \
             TERMUX_VERSION=50 \
-            _git_http="github" \
+            _git_service="github" \
             reallymakepkg \
               -v \
               -w \
-                "${HOME}/${_pkgbase}-git-build" \
+                "${HOME}/${_pkgbase}-build" \
               -u \
               -- \
               -df \
@@ -743,17 +776,17 @@ jobs:
       # - name:
       #     Installs the package.
       #   run: |
+      #     export \
+      #       _pkgname="$( \
+      #         /entrypoint.sh \
+      #           recipe-get \
+      #             "PKGBUILD" \
+      #             "pkgname")"
       #     /entrypoint.sh \
       #       pacman \
       #         -Rdd \
       #         --noconfirm \
-      #         fur || \
-      #         true
-      #     /entrypoint.sh \
-      #       pacman \
-      #         -Rdd \
-      #         --noconfirm \
-      #         fur-docs || \
+      #         ${_pkgname} || \
       #         true
       #     /entrypoint.sh \
       #       pacman \
@@ -769,7 +802,7 @@ jobs:
           /entrypoint.sh \
             _evmfs="false" \
             _git="true" \
-            _git_http="github" \
+            _git_service="github" \
             makepkg \
               --nobuild \
               -df \
@@ -800,9 +833,9 @@ jobs:
             ${{ github.event.release.upload_url }}
             # ${{ steps.create_release.outputs.upload_url }}
           asset_path:
-            reallymakepkg-${{ steps.version.outputs.version }}-any.pkg.tar.xz
+            "reallymakepkg-${{ steps.version.outputs.version }}-any.pkg.tar.xz"
           asset_name:
-            dogeos-android-reallymakepkg-${{ steps.version.outputs.version }}-any.pkg.tar.xz
+            "reallymakepkg-${{ steps.version.outputs.version }}-any.pkg.tar.xz"
           asset_content_type:
             application/gzip
   arch_release:
@@ -1316,9 +1349,14 @@ jobs:
       - name:
           Builds the Arch package.
         run: |
+          export \
+            _pkgbase="$(
+              recipe-get \
+                "PKGBUILD" \
+                "pkgbase")"
           su \
             -c \
-              "cd $(pwd) && _evmfs="false" _git_http="github" reallymakepkg -v -u -w '/home/user/${_pkgbase}-build' -- -df --nocheck --skippgpcheck" - \
+              "cd $(pwd) && _evmfs="false" _git_service="github" reallymakepkg -v -u -w '/home/user/${_pkgbase}-build' -- -df --nocheck --skippgpcheck" - \
             "user"
       # - name:
       #     Installs the package.
@@ -1367,9 +1405,9 @@ jobs:
             ${{ github.event.release.upload_url }}
             # ${{ steps.create_release.outputs.upload_url }}
           asset_path:
-            reallymakepkg-${{ steps.version.outputs.version }}-any.pkg.tar.xz
+            "reallymakepkg-${{ steps.version.outputs.version }}-any.pkg.tar.xz"
           asset_name:
-            dogeos-gnu-reallymakepkg-${{ steps.version.outputs.version }}-any.pkg.tar.xz
+            "dogeos-gnu-reallymakepkg-${{ steps.version.outputs.version }}-any.pkg.tar.xz"
           asset_content_type:
             application/gzip
   msys2_release:
@@ -1492,7 +1530,7 @@ jobs:
             -rf \
             "${HOME}/fur"
       - name:
-          Installs Crash Bash Library.
+          Installs latest Crash Bash Library.
         run: |
           git \
             clone \
@@ -1577,23 +1615,24 @@ jobs:
         run: |
           dos2unix \
             "PKGBUILD"
-          # _evmfs="false" \
-          # PKGEXT='.pkg.tar.xz' \
-          # makepkg \
-          #   -df \
-          #   --nocheck
+          # export \
+          #   _pkgbase="$( \
+          #     recipe-get \
+          #       "PKGBUILD" \
+          #       "pkgbase")"
           PKGEXT='.pkg.tar.xz' \
           _evmfs="false" \
-          _git_http="github" \
+          _git_service="github" \
           makepkg \
             -df \
             --nocheck \
             --skippgpcheck
           # _evmfs="false" \
+          # _git_service="github" \
           # reallymakepkg \
           #   -v \
           #   -w \
-          #     "${HOME}/reallymakepkg-git-build" \
+          #     "${HOME}/${_pkgbase}-build" \
           #   -u \
           #   -- \
           #   -df \
@@ -1633,16 +1672,14 @@ jobs:
             "::set-output name=version::$( \
             export \
               _evmfs="false" && \
-            bash \
-              "reallymakepkg/reallymakepkg/recipe-get" \
-                "PKGBUILD" \
-                "pkgver")-$( \
+            recipe-get \
+              "PKGBUILD" \
+              "pkgver")-$( \
             export \
               _evmfs="false" && \
-            bash \
-              "reallymakepkg/reallymakepkg/recipe-get" \
-                "PKGBUILD" \
-                "pkgrel")"
+            recipe-get \
+              "PKGBUILD" \
+              "pkgrel")"
         id:
           version
       - name:
@@ -1657,9 +1694,9 @@ jobs:
             ${{ github.event.release.upload_url }}
             # ${{ steps.create_release.outputs.upload_url }}
           asset_path:
-            reallymakepkg-${{ steps.version.outputs.version }}-any.pkg.tar.xz
+            "reallymakepkg-${{ steps.version.outputs.version }}-any.pkg.tar.xz"
           asset_name:
-            dogeos-windows-reallymakepkg-${{ steps.version.outputs.version }}-any.pkg.tar.xz
+            "dogeos-windows-reallymakepkg-${{ steps.version.outputs.version }}-any.pkg.tar.xz"
           asset_content_type:
             application/gzip
 
@@ -1682,7 +1719,13 @@ jobs:
               "clang" \
           pip \
             install \
-            "meson"
+              "meson"
+          pip \
+            install \
+              "build"
+          pip \
+            install \
+              "installer"
       - uses:
           actions/checkout@v3.3.0
       - name:

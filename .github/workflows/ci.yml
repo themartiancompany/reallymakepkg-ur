@@ -173,16 +173,17 @@ jobs:
             pkg \
               install \
                 -y \
-                "python"
-      - name:
-          Installs Rust.
-        run: |
-          /entrypoint.sh \
-            apt \
-              install \
-                -y \
-                "rust" \
-                "rust-std-armv7-linux-androideabi"
+                "python" \
+                "python-pip"
+      # - name:
+      #     Installs Rust.
+      #   run: |
+      #     /entrypoint.sh \
+      #       apt \
+      #         install \
+      #           -y \
+      #           "rust" \
+      #           "rust-std-armv7-linux-androideabi"
       - name:
           Installs Git.
         run: |
@@ -646,8 +647,27 @@ jobs:
           #     "meson"
           #
       - name:
-          Installs latest stable Fur.
+          Installs Docutils.
         run: |
+          SHELL="bash" \
+          /entrypoint.sh \
+            pip \
+              install \
+                "docutils"
+      - name:
+          Installs latest Fur.
+        run: |
+          /entrypoint.sh \
+            git \
+              clone \
+                --branch="main" \
+                --single-branch \
+                --depth=1 \
+                "https://github.com/themartiancompany/fur" \
+                "${HOME}/fur-src" || \
+            true
+          cd 
+            "${HOME}/fur-src"
           /entrypoint.sh \
             make \
               -C \
@@ -693,7 +713,7 @@ jobs:
           /entrypoint.sh \
             TERMUX_VERSION="50" \
             _evmfs="false" \
-            _git_http="github" \
+            _git_service="github" \
             reallymakepkg \
               -v \
               -w \
@@ -760,7 +780,7 @@ jobs:
           name:
             artifact-${{ matrix.platform }}-${{ matrix.architecture }}
           path:
-            reallymakepkg-${{ steps.version.outputs.version }}-any.pkg.tar.xz
+            python-docutils-${{ steps.version.outputs.version }}-any.pkg.tar.xz
       # - name:
       #     Upload Termux package.
       #   uses:
@@ -1257,7 +1277,7 @@ jobs:
             "user:user" \
             "$(pwd)"
       - name:
-          Installs latest stable Fur.
+          Installs latest Fur.
         run: |
           git \
             clone \
@@ -1269,7 +1289,7 @@ jobs:
             true
           make \
             -C \
-              "${HOME}/fur-src"
+              "${HOME}/fur-src" \
             PREFIX="/usr" \
             install-fur
       # - name:
@@ -1311,7 +1331,7 @@ jobs:
         run: |
           su \
             -c \
-              "cd '$(pwd)' && _evmfs="false" _git_http="github" makepkg -df --nocheck --skippgpcheck" - \
+              "cd '$(pwd)' && _evmfs="false" _git_service="github" makepkg -df --nocheck --skippgpcheck" - \
             "user"
       # - name:
       #     Installs the package.
@@ -1361,7 +1381,7 @@ jobs:
           name:
             artifact-${{ matrix.platform }}-${{ matrix.architecture }}
           path:
-            reallymakepkg-${{ steps.version.outputs.version }}-any.pkg.tar.xz
+            python-docutils-${{ steps.version.outputs.version }}-any.pkg.tar.xz
   msys2:
     name:
       Life and DogeOS Windows base packages (CI).
@@ -1485,7 +1505,7 @@ jobs:
           cd \
            ".."
       - name:
-          Installs latest stable Fur.
+          Installs latest Fur.
         run: |
           git \
             clone \
@@ -1550,7 +1570,7 @@ jobs:
           dos2unix \
             "PKGBUILD"
           _evmfs="false" \
-          _git_http="github" \
+          _git_service="github" \
           makepkg \
             -df \
             --nocheck \
@@ -1599,7 +1619,7 @@ jobs:
           name:
             artifact-${{ matrix.sys }}-${{ matrix.env }}
           path:
-            reallymakepkg-${{ steps.version.outputs.version }}-any.pkg.tar.xz
+            python-docutils-${{ steps.version.outputs.version }}-any.pkg.tar.xz
   # This is the ideal way termux-docker would work with GHA.
   broken-ideal:
     name:
@@ -1620,10 +1640,19 @@ jobs:
                 -y \
                 "ninja" \
                 "clang" \
+                "python-pip"
           /entrypoint.sh \
             pip \
               install \
               "meson"
+          /entrypoint.sh \
+            pip \
+              install \
+              "build"
+          /entrypoint.sh \
+            pip \
+              install \
+              "installer"
       - uses:
           actions/checkout@v3.3.0
       - name:
